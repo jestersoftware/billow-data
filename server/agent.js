@@ -1,4 +1,4 @@
-const winston = require('winston')
+const { logger } = require('./logger')
 
 const fetch = require('node-fetch')
 
@@ -7,7 +7,7 @@ const Util = require('./util')
 const sql = require('./sql')
 
 function fulfillRequest(request, result) {
-  winston.log('info', 'fulfillRequest', '**** AGENT SENDING RESPONSE ****', request.id, request.name)
+  logger.log('info', 'fulfillRequest %s %s %s', '**** AGENT SENDING RESPONSE ****', request.id, request.name)
 
   fetch(
     `http://localhost:3001/api/request/fulfill`,
@@ -24,7 +24,7 @@ function fulfillRequest(request, result) {
     .then(Util.parseJSON)
     .then(() => { setTimeout(getRequests, 2000) })
     .catch(err => {
-      winston.log('error', 'fulfillRequest', err)
+      logger.log('error', 'fulfillRequest', err)
 
       setTimeout(getRequests, 5000)
     })
@@ -32,7 +32,7 @@ function fulfillRequest(request, result) {
 
 function processRequest(request, callback) {
   if (request.name) {
-    winston.log('info', 'processRequest', '**** AGENT PROCESSING REQUEST ****', request.id, request.name)
+    logger.log('info', 'processRequest %s %s %s', '**** AGENT PROCESSING REQUEST ****', request.id, request.name)
 
     if (request.name === 'databases') {
       sql.getSqlDatabaseList(request.parent, result => callback(request, result))
@@ -41,7 +41,7 @@ function processRequest(request, callback) {
       sql.getSqlTableList(request.parent, result => callback(request, result))
     }
     else {
-      winston.log('warn', 'processRequest', '**** AGENT RECEIVED UNKNOWN REQUEST ****', request)
+      logger.log('warn', 'processRequest %s %s', '**** AGENT RECEIVED UNKNOWN REQUEST ****', request)
 
       return -1
     }
@@ -53,7 +53,7 @@ function processRequest(request, callback) {
 }
 
 function getRequests() {
-  // winston.log('warn', '**** AGENT CHECKING FOR REQUESTS ****')
+  // logger.log('warn', '**** AGENT CHECKING FOR REQUESTS ****')
 
   try {
     fetch(
@@ -67,17 +67,17 @@ function getRequests() {
         request => {
           // if (request.name) {
           // if (request.name === 'databases') {
-          //   winston.log('info', 'getRequests', '**** AGENT RECEIVED REQUEST ****', request.id, request.name)
+          //   logger.log('info', 'getRequests %s %s %s', '**** AGENT RECEIVED REQUEST ****', request.id, request.name)
 
           //   sql.getSqlDatabaseList('', result => fulfillRequest(request, result))
           // }
           // else if (request.name === 'tables') {
-          //   winston.log('info', 'getRequests', '**** AGENT RECEIVED REQUEST ****', request.id, request.name)
+          //   logger.log('info', 'getRequests %s %s %s', '**** AGENT RECEIVED REQUEST ****', request.id, request.name)
 
           //   sql.getSqlTableList(request.parent, result => fulfillRequest(request, result))
           // }
           // else {
-          //   winston.log('warn', 'getRequests', '**** AGENT RECEIVED UNKNOWN REQUEST ****', request.id, request.name)
+          //   logger.log('warn', 'getRequests %s %s %s', '**** AGENT RECEIVED UNKNOWN REQUEST ****', request.id, request.name)
 
           //   setTimeout(getRequests, 2000)
           // }
@@ -85,7 +85,7 @@ function getRequests() {
           const status = processRequest(request, fulfillRequest)
           // }
           // else {
-          // winston.log('info', '**** AGENT RECEIVED NO REQUESTS ****')
+          // logger.log('info', '**** AGENT RECEIVED NO REQUESTS ****')
 
           if (status < 1) {
             setTimeout(getRequests, 2000)
@@ -95,7 +95,7 @@ function getRequests() {
       )
       .catch(
         err => {
-          winston.log('error', err)
+          logger.log('error', err)
 
           setTimeout(getRequests, 5000)
         }

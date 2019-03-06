@@ -1,4 +1,4 @@
-const winston = require('winston')
+const { logger } = require('./logger')
 
 const mssql = require('mssql')
 
@@ -81,7 +81,7 @@ function runQuery(config, query, callback) {
       return pool.request().query(query)
     })
     .then(result => {
-      winston.log('info', 'runQuery', '**** SQL SUCCESS ****', 'Query: ', query)
+      logger.log('info', 'runQuery %s %s %s', '**** SQL SUCCESS ****', 'Query: ', query)
 
       mssql.close()
 
@@ -89,7 +89,7 @@ function runQuery(config, query, callback) {
 
       callback && callback(translatedResult)
     }).catch(error => {
-      winston.log('error', 'runQuery', '**** SQL ERROR ****', 'Error: ', error)
+      logger.log('error', 'runQuery' + '**** SQL ERROR ****', error)
 
       mssql.close()
 
@@ -99,7 +99,7 @@ function runQuery(config, query, callback) {
     })
 
   mssql.on('error', error => {
-    winston.log('error', 'runQuery', '**** SQL ERROR ****', 'Error: ', error)
+    logger.log('error', 'runQuery' + '**** SQL ERROR ****', error)
   })
 }
 
@@ -113,7 +113,7 @@ function getSqlDatabaseList(parent, callback) {
 
   //     res.json(result)
   //   } catch (err) {
-  //     winston.log('info', err)
+  //     logger.log('info', err)
   //   }
   // }
 
@@ -131,7 +131,7 @@ function getSqlDatabaseList(parent, callback) {
   // })
   //   // .then(result => {
 
-  //   //   winston.log('info', recordset)
+  //   //   logger.log('info', recordset)
 
   //   //   // Stored procedure
 
@@ -141,7 +141,7 @@ function getSqlDatabaseList(parent, callback) {
   //   //     .execute('procedure_name')
   //   // })
   //   .then(result => {
-  //     winston.log('info', 'getSqlDatabaseList', '**** SQL SUCCESS ****', 'Query: ', query)
+  //     logger.log('info', 'getSqlDatabaseList', '**** SQL SUCCESS ****', 'Query: ', query)
 
   //     mssql.close()
 
@@ -149,7 +149,7 @@ function getSqlDatabaseList(parent, callback) {
 
   //     callback && callback(translatedResult)
   //   }).catch(error => {
-  //     winston.log('error', 'getSqlDatabaseList', '**** SQL ERROR ****', 'Error: ', error)
+  //     logger.log('error', 'getSqlDatabaseList', '**** SQL ERROR ****', 'Error: ', error)
 
   //     mssql.close()
 
@@ -159,7 +159,7 @@ function getSqlDatabaseList(parent, callback) {
   //   })
 
   // mssql.on('error', error => {
-  //   winston.log('error', 'getSqlDatabaseList', '**** SQL ERROR ****', 'Error: ', error)
+  //   logger.log('error', 'getSqlDatabaseList', '**** SQL ERROR ****', 'Error: ', error)
   // })
 
   runQuery(baseConfig, query, callback)

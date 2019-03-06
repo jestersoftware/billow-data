@@ -1,4 +1,4 @@
-const winston = require('winston')
+const { logger } = require('./logger')
 
 // const electron = require('electron')
 // const { app, BrowserWindow } = require('electron')
@@ -6,8 +6,7 @@ const winston = require('winston')
 const express = require('express')
 const bodyParser = require('body-parser')
 
-const { graphqlExpress, graphiqlExpress } = require('apollo-server-express')
-const { makeExecutableSchema } = require('graphql-tools')
+const { ApolloServer, gql } = require('apollo-server-express');
 
 const sql = require('./sql')
 const agent = require('./agent')
@@ -27,7 +26,7 @@ const books = [
 ]
 
 // The GraphQL schema in string form
-const typeDefs = `
+const typeDefs = gql`
   type Query { books: [Book] }
   type Book { title: String, author: String }
 `
@@ -37,38 +36,19 @@ const resolvers = {
   Query: { books: () => books },
 }
 
-// Put together a schema
-const schema = makeExecutableSchema({
-  typeDefs,
-  resolvers,
-})
-
 // Initialize the app
 const app = express()
 
-app.use(bodyParser.json({ limit: '10mb' }))
-app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
-
 app.set('port', process.env.PORT || 3001)
 
-winston.log('info', 'ENV PORT=', process.env.PORT, app.get('port'))
+logger.log('info', 'ENV PORT= %s %s', process.env.PORT, app.get('port'))
 
 if (process.env.NODE_ENV == 'production') {
   app.use(express.static('ui/build'))
 }
 
-// The GraphQL endpoint
-app.use(
-  '/graphql',
-  bodyParser.json(),
-  graphqlExpress({ schema })
-)
-
-// GraphiQL, a visual editor for queries
-app.use(
-  '/graphiql',
-  graphiqlExpress({ endpointURL: '/graphql' })
-)
+const server = new ApolloServer({ typeDefs, resolvers });
+server.applyMiddleware({ app });
 
 function translateRequest(req, res) {
   return {
@@ -85,14 +65,14 @@ function translateRequest(req, res) {
 app.get(
   '/api/request/add',
   (req, res) => {
-    winston.log('info', '/api/request/add', '**** 1. CLIENT SUBMITTED REQUEST AS URL QUERY ****', '[name]', req.query.name, '[parent]', req.query.parent)
+    logger.log('info', '/api/request/add %s %s %s %s %s', '**** 1. CLIENT SUBMITTED REQUEST AS URL QUERY ****', '[name]', req.query.name, '[parent]', req.query.parent)
 
     requests.push(translateRequest(req, res))
   }
 ).on(
   'error',
   (e) => {
-    winston.log('error', '/api/request/add', e)
+    logger.log('error', '/api/request/add', e)
   }
 )
 
@@ -100,7 +80,7 @@ app.get(
 app.get(
   '/api/requests',
   (req, res) => {
-    // winston.log('info', '**** SERVER RECEIVED CHECK FOR REQUESTS ****')
+    // logger.log('info', '**** SERVER RECEIVED CHECK FOR REQUESTS ****')
 
     const newRequests = requests.filter(r => !r.inProcess && !r.complete)
 
@@ -108,12 +88,12 @@ app.get(
 
     if (request) {
       if (!request.name) {
-        winston.log('error', '/api/requests', '**** 2. SERVER NOT SENDING REQUEST TO AGENT (INVALID REQUEST - [name] is empty) ****', request)
+        logger.log('error', '/api/requests %s %s', '**** 2. SERVER NOT SENDING REQUEST TO AGENT (INVALID REQUEST - [name] is empty) ****', request)
 
         res.json({})
       }
       else {
-        winston.log('info', '/api/requests', '**** 2. SERVER SENDING REQUEST TO AGENT ****', '[id]', request.id, '[name]', request.name, '[parent]', req.query.parent)
+        logger.log('info', '/api/requests %s %s %s %s %s %s %s', '**** 2. SERVER SENDING REQUEST TO AGENT ****', '[id]', request.id, '[name]', request.name, '[parent]', req.query.parent)
 
         request.inProcess = true
 
@@ -133,7 +113,7 @@ app.get(
 ).on(
   'error',
   (e) => {
-    winston.log('error', '/api/requests', e)
+    logger.log('error', '/api/requests', e)
   }
 )
 
@@ -144,14 +124,14 @@ app.post(
   (req, res) => {
     const { request, sql } = req.body
 
-    winston.log('info', '/api/request/fulfill', '**** 3. SERVER RECEIVES RESPONSE FROM AGENT ****', request.id, request.name)
+    logger.log('info', '/api/request/fulfill %s %s %s', '**** 3. SERVER RECEIVES RESPONSE FROM AGENT ****', request.id, request.name)
 
-    // winston.log('info', '/api/request/fulfill', '**** ALL INTERNAL REQUESTS ****', requests.map((r) => { return { id: r.id, name: r.name, complete: r.complete } }))
+    // logger.log('info', '/api/request/fulfill', '**** ALL INTERNAL REQUESTS ****', requests.map((r) => { return { id: r.id, name: r.name, complete: r.complete } }))
 
     const internalRequest = requests.find(r => r.id === request.id)
 
     if (internalRequest) {
-      winston.log('info', '/api/request/fulfill', '**** 4. SERVER SENDING RESPONSE TO CLIENT ****', internalRequest.id, internalRequest.name)
+      logger.log('info', '/api/request/fulfill %s %s %s', '**** 4. SERVER SENDING RESPONSE TO CLIENT ****', internalRequest.id, internalRequest.name)
 
       internalRequest.res.json(sql)
 
@@ -172,7 +152,7 @@ app.post(
 ).on(
   'error',
   (e) => {
-    winston.log('error', '/api/request/fulfill', e)
+    logger.log('error', '/api/request/fulfill', e)
   }
 )
 
@@ -180,7 +160,7 @@ app.post(
 app.get(
   '/api/sql',
   (req, res) => {
-    winston.log('info', '/api/sql', '**** AGENT RECEIVED SQL REQUEST DIRECTLY ****', req.query.name)
+    logger.log('info', '/api/sql %s %s', '**** AGENT RECEIVED SQL REQUEST DIRECTLY ****', req.query.name)
 
     const status = agent.processRequest(translateRequest(req, res), (request, result) => res.json(result))
 
@@ -191,7 +171,7 @@ app.get(
 ).on(
   'error',
   (e) => {
-    winston.log('error', '/api/sql', e)
+    logger.log('error', '/api/sql', e)
   }
 )
 
@@ -199,9 +179,9 @@ app.get(
 app.listen(
   app.get('port'),
   () => {
-    winston.log('info', `Find the server at: http://localhost:${app.get('port')}/`)
+    logger.log('info', `Find the server at: http://localhost:${app.get('port')}/`)
 
-    winston.log('info', `Go to http://localhost:${app.get('port')}/graphiql to run queries!`)
+    logger.log('info', `Go to http://localhost:${app.get('port')}/graphql to run queries!`)
   }
 )
 
@@ -275,7 +255,7 @@ if (app.get('port') == 3333) {
     // TODO
   }
 
-  winston.log('info', 'setting interval')
+  logger.log('info', 'setting interval')
 
   setTimeout(agent.getRequests, 2000)
 }
