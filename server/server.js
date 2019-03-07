@@ -39,6 +39,9 @@ const resolvers = {
 // Initialize the app
 const app = express()
 
+app.use(bodyParser.json({ limit: '10mb' }))
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }))
+
 app.set('port', process.env.PORT || 3001)
 
 logger.log('info', 'ENV PORT= %s %s', process.env.PORT, app.get('port'))
