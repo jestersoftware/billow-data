@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import { ThemeProvider, createTheme, SoundsProvider, createSounds, Arwes, /* Button, */ Project, Words } from 'arwes'
+
 import posed/* , { PoseGroup } */ from 'react-pose'
 
 // import logo from './logo.svg'
@@ -147,6 +149,17 @@ class App extends Component {
     console.log('App render')
 
     return (
+      <ThemeProvider
+        theme={createTheme()}
+      >
+        <SoundsProvider
+          sounds={createSounds(mySounds)}
+        >
+          <Arwes
+            animate
+            pattern='/img/glow.png'
+          >
+            {/* background='/img/background.jpg' */}
             <div className='App'>
               <header className='App-header'>
                 {/* <img src={logo} className='App-logo' alt='logo' /> */}
@@ -157,18 +170,43 @@ class App extends Component {
                   pose={this.state.isVisible ? 'visible' : 'hidden'}
                 />
               </header>
+              {/* 
+              <p className='App-intro'>
+                To get started, edit <code>src/App.js</code> and save to reload.
+              </p> 
+              */}
+              {/* <div className='App-buttons'>
+                <div className='App-button'>
+                  <Button animate onClick={this.submitRequest}>
+                    Submit Request
+                  </Button>
+                </div>
+                <div className='App-button'>
+                  <Button animate onClick={this.submitRequestDirect}>
+                    Agent Direct
+                  </Button>
+                </div>
+                <div>
+                  Request: {this.state.requestStatus || ''}
+                </div>
+              </div> */}
               <SqlCommands />
-              <div>
+              <Project
+                animate
+                header='DATABASES'
+                icon={<i className='mdi mdi-database' />}
+              >
+                {anim => (
                   <div>
                     <div style={{ marginBottom: 20 }}>
-                      <div>
+                      <Words animate show={anim.entered}>
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit,
                         sed do eiusmod tempor incididunt ut labore et dolore magna
                         aliqua. Ut enim ad minim veniam, quis laboris nisi ut aliquip
                         ex. Duis aute irure. Consectetur adipisicing elit, sed do
                         eiusmod tempor incididunt ut labore et dolore magna aliqua.
                         Ut enim ad minim veniam, quis nostrud.
-                      </div>
+                      </Words>
                     </div>
                     {/* <SqlList
                         billow={this.state.databasesResponse}
@@ -178,8 +216,13 @@ class App extends Component {
                     </DataContext.Provider> */}
                     <SqlListContainer />
                   </div>
-              </div>
+                )}
+              </Project>
             </div>
+          </Arwes>
+        </SoundsProvider>
+
+      </ThemeProvider>
     )
   }
 }

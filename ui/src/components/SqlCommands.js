@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 
 import { connect } from 'react-redux'
 
-import { Button } from 'arwes'
-
 import { fetchPosts } from '../store/actions/index'
 
 class SqlCommands extends Component {
@@ -63,14 +61,14 @@ class SqlCommands extends Component {
     return (
       <div className='App-buttons'>
         <div className='App-button'>
-          <Button animate onClick={() => this.props.submitRequest('databases')}>
+          <button onClick={() => this.props.submitRequest('databases')}>
             Submit Request
-          </Button>
+          </button>
         </div>
         <div className='App-button'>
-          <Button animate onClick={this.submitRequestDirect}>
+          <button onClick={this.submitRequestDirect}>
             Agent Direct
-          </Button>
+          </button>
         </div>
         <div>
           Request: {this.props.billow.requestStatus || ''}

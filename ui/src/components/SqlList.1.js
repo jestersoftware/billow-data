@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
+import { Frame, Table, Button } from 'arwes'
+
 import Api, { DataContext } from '../api/Api'
 
 // import datasetCollectionMock from './SqlListMock'
@@ -106,16 +108,17 @@ class SqlList extends Component {
 
     const databaseButtons = _.map(
       queryFirst.values,
-      (value, index) => {
+      value => {
         // console.log('key', value.name)
 
         return (
-          <button
-            key={index}
+          <Button
+            key={value.name}
+            animate
             onClick={() => this.submitRequest(value.name)}
           >
             {value.name}
-          </button>
+          </Button>
         )
       }
     )
@@ -136,58 +139,21 @@ class SqlList extends Component {
 
       dataset = _.map(queryTables.values, value => _.values(value)) // this.state.dataset
 
-      const tableHeaders = _.map(
-        headers,
-        (value, index) => {
-          // console.log('key', value.name)
-  
-          return (
-            <th key={index}>
-              {value}
-            </th>
-          )
-        }
-      )
-
-      const tableRows = _.map(
-        dataset,
-        value => {
-          // console.log('key', value.name)
-  
-          return (
-            <tr key={value}>
-              {
-                _.map(
-                  value,
-                  (item, index) => {
-                    return (
-                      <td key={index}>
-                        {item}
-                      </td>
-                    )
-                  }
-                )
-              }
-            </tr>
-          )
-        }
-      )
-
       return (
         <div>
           {databaseButtons}
-          <div>
+          <Frame
+            animate={true}
+            level={3}
+            corners={4}
+            layer='primary'
+          >
             <div style={{ padding: 20 }}>
-              <table>
-                <thead>
-                  <tr>
-                    {tableHeaders}
-                  </tr>
-                </thead>
-                <tbody>
-                  {tableRows}
-                </tbody>
-              </table>
+              <Table
+                animate
+                headers={headers}
+                dataset={dataset}
+              />
             </div>
 
             {/* 
@@ -224,7 +190,7 @@ class SqlList extends Component {
             </tfoot>
           </table> 
           */}
-          </div>
+          </Frame>
         </div>
       )
     }
