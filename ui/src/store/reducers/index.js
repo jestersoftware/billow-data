@@ -11,6 +11,8 @@ function posts(
     status: "loading",
     queries: [
       {
+        name: "",
+        parent: "",
         count: 0,
         query: "none",
         fields: ["name"],
@@ -38,7 +40,29 @@ function posts(
       //   items: action.posts,
       //   lastUpdated: action.receivedAt
       // })
-      return Object.assign({}, state, action.posts)
+
+      // Find existing query with same name
+      let queryToUpdate = state.queries.find(q => q.name === action.name)
+
+      if (queryToUpdate) {
+        Object.assign(queryToUpdate, { name: action.name, parent: action.parent }, action.posts.queries[0])
+      }
+      else {
+        // Find 'blank' query
+        queryToUpdate = state.queries.find(q => q.name === '')
+
+        if (queryToUpdate) {
+          Object.assign(queryToUpdate, { name: action.name, parent: action.parent }, action.posts.queries[0])
+        }
+        else {
+          // Create a new query
+          queryToUpdate = {}
+          Object.assign(queryToUpdate, { name: action.name, parent: action.parent }, action.posts.queries[0])
+          state.queries.push(queryToUpdate)
+        }
+      }
+
+      return Object.assign({}, state)
     default:
       return state
   }

@@ -3,43 +3,45 @@ import React, { Component } from 'react'
 import posed/* , { PoseGroup } */ from 'react-pose'
 
 // import logo from './logo.svg'
-import './App.css'
+import './App.scss'
 
-import Api/* , {defaultResponse, DataContext} */ from './api/Api'
+// import Api/* , {defaultResponse, DataContext} */ from './api/Api'
 
 import SqlListContainer from './components/SqlListContainer'
 import SqlCommands from './components/SqlCommands'
 
+// import '@material/react-button/dist/button.css';
+
 // const MATCHING_ITEM_LIMIT = 25
 
-const mySounds = {
-  shared: { volume: 1, },  // Shared sound settings
-  players: {  // The player settings
-    click: {  // With the name the player is created
-      sound: { src: ['/sound/click.mp3'] }  // The settings to pass to Howler
-    },
-    typing: {
-      sound: { src: ['/sound/typing.mp3'] },
-      settings: { oneAtATime: true }  // The custom app settings
-    },
-    deploy: {
-      sound: { src: ['/sound/deploy.mp3'] },
-      settings: { oneAtATime: true }
-    },
-    information: {
-      sound: { src: ['/sound/information.mp3'] }
-    },
-    ask: {
-      sound: { src: ['/sound/ask.mp3'] }
-    },
-    warning: {
-      sound: { src: ['/sound/warning.mp3'] }
-    },
-    error: {
-      sound: { src: ['/sound/error.mp3'] }
-    }
-  }
-}
+// const mySounds = {
+//   shared: { volume: 1, },  // Shared sound settings
+//   players: {  // The player settings
+//     click: {  // With the name the player is created
+//       sound: { src: ['/sound/click.mp3'] }  // The settings to pass to Howler
+//     },
+//     typing: {
+//       sound: { src: ['/sound/typing.mp3'] },
+//       settings: { oneAtATime: true }  // The custom app settings
+//     },
+//     deploy: {
+//       sound: { src: ['/sound/deploy.mp3'] },
+//       settings: { oneAtATime: true }
+//     },
+//     information: {
+//       sound: { src: ['/sound/information.mp3'] }
+//     },
+//     ask: {
+//       sound: { src: ['/sound/ask.mp3'] }
+//     },
+//     warning: {
+//       sound: { src: ['/sound/warning.mp3'] }
+//     },
+//     error: {
+//       sound: { src: ['/sound/error.mp3'] }
+//     }
+//   }
+// }
 
 // const defaultResponse = {
 //   status: "loading",
@@ -144,7 +146,7 @@ class App extends Component {
   // }  
 
   render() {
-    console.log('App render')
+    // console.log('App render')
 
     return (
             <div className='App'>

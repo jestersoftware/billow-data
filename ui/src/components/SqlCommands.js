@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 
 import { fetchPosts } from '../store/actions/index'
 
+import Button from '@material/react-button';
+
 class SqlCommands extends Component {
 
   submitRequestDirect = () => {
@@ -56,19 +58,26 @@ class SqlCommands extends Component {
 
 
   render() {
-    console.log('sqlcommands', this.props)
+    // console.log('sqlcommands', this.props)
 
     return (
       <div className='App-buttons'>
         <div className='App-button'>
-          <button onClick={() => this.props.submitRequest('databases')}>
+          <Button
+            raised
+            className='button-alternate'
+            onClick={() => this.props.submitRequest('databases', '')}
+          >
             Submit Request
-          </button>
+          </Button>
         </div>
         <div className='App-button'>
-          <button onClick={this.submitRequestDirect}>
+          <Button
+            raised
+            onClick={this.submitRequestDirect}
+          >
             Agent Direct
-          </button>
+          </Button>
         </div>
         <div>
           Request: {this.props.billow.requestStatus || ''}
@@ -85,7 +94,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  submitRequest: name => dispatch(fetchPosts(name))
+  submitRequest: (name, parent) => dispatch(fetchPosts(name, parent))
 })
 
 export default connect(

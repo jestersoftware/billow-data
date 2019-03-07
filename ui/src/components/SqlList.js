@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import Api, { DataContext } from '../api/Api'
+import { connect } from 'react-redux'
+
+import { fetchPosts } from '../store/actions/index'
+
+// import Api, { DataContext } from '../api/Api'
 
 // import datasetCollectionMock from './SqlListMock'
 
@@ -9,26 +13,28 @@ const _ = require('lodash')
 
 // export default function SelectedFoods(props) {
 class SqlList extends Component {
-  constructor(props) {
-    super(props)
+  // constructor(props) {
+  //   super(props)
 
-    this.state = {
-      tablesResponse: null //,
-      // headers:
-      //   [
-      //     'Prop name',
-      //     'Type',
-      //     'Default',
-      //     'Description'
-      //   ],
-      // dataset:
-      //   [
-      //     ['name', 'string', '\'\'', 'The base name of the component'],
-      //     ['age', 'number', '0', 'The age of the component'],
-      //     ['married', 'bool', 'false', 'If the component is married'],
-      //   ]
-    }
-  }
+  //   // this.state = {
+  //   //   // tablesResponse: null //,
+  //   //   databases: null,
+  //   //   tables: null
+  //   //   // headers:
+  //   //   //   [
+  //   //   //     'Prop name',
+  //   //   //     'Type',
+  //   //   //     'Default',
+  //   //   //     'Description'
+  //   //   //   ],
+  //   //   // dataset:
+  //   //   //   [
+  //   //   //     ['name', 'string', '\'\'', 'The base name of the component'],
+  //   //   //     ['age', 'number', '0', 'The age of the component'],
+  //   //   //     ['married', 'bool', 'false', 'If the component is married'],
+  //   //   //   ]
+  //   // }
+  // }
 
   // state = {
   //   sql: [],
@@ -47,23 +53,23 @@ class SqlList extends Component {
   //   </tr>
   // ))
 
-  submitRequest = (databaseId) => {
-    Api.submitRequest(
-      'tables',
-      databaseId,
-      response => {
-        this.setState(
-          {
-            tablesResponse: response
-          }
-        )
-      }
-    )
-  }
+  // submitRequest = (databaseId) => {
+  //   Api.submitRequest(
+  //     'tables',
+  //     databaseId,
+  //     response => {
+  //       this.setState(
+  //         {
+  //           tablesResponse: response
+  //         }
+  //       )
+  //     }
+  //   )
+  // }
 
   render() {
     // console.log('props', this.props)
-    console.log('SqlList render')
+    // console.log('SqlList render')
 
 
     // return (
@@ -101,18 +107,21 @@ class SqlList extends Component {
 
     let { billow } = this.props
 
-    const queryFirst = billow.queries[0]
+    // const queryFirst = billow.queries[0]
 
+    const queryDatabases = billow.queries.find(q => q.name === 'databases' || q.name === '')
+
+    const queryTables = billow.queries.find(q => q.name === 'tables')
 
     const databaseButtons = _.map(
-      queryFirst.values,
+      queryDatabases.values,
       (value, index) => {
         // console.log('key', value.name)
 
         return (
           <button
             key={index}
-            onClick={() => this.submitRequest(value.name)}
+            onClick={() => this.props.submitRequest('tables', value.name)}
           >
             {value.name}
           </button>
@@ -121,20 +130,20 @@ class SqlList extends Component {
     )
 
 
-    let headers = queryFirst.fields // this.state.headers
+    // let headers = queryFirst.fields // this.state.headers
 
-    let dataset = _.map(queryFirst.values, value => _.values(value)) // this.state.dataset
+    // let dataset = _.map(queryFirst.values, value => _.values(value)) // this.state.dataset
 
     // console.log('dataset', dataset)
 
-    if (this.state.tablesResponse) {
+    if (queryTables) {
       // console.log('aaa')
 
-      const queryTables = this.state.tablesResponse.queries[0]
+      // const queryTables = billow.queries[0]
 
-      headers = queryTables.fields // this.state.headers
+      const headers = queryTables.fields // this.state.headers
 
-      dataset = _.map(queryTables.values, value => _.values(value)) // this.state.dataset
+      const dataset = _.map(queryTables.values, value => _.values(value)) // this.state.dataset
 
       const tableHeaders = _.map(
         headers,
@@ -244,4 +253,17 @@ SqlList.propTypes = {
 //     .toFixed(2)
 // }
 
-export default SqlList
+// export default SqlList
+
+// const mapStateToProps = state => ({
+//   billow: state // getVisibleTodos(state.todos, state.visibilityFilter)
+// })
+
+const mapDispatchToProps = dispatch => ({
+  submitRequest: (name, parent) => dispatch(fetchPosts(name, parent))
+})
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(SqlList)

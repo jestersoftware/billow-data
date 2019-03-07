@@ -1,6 +1,6 @@
 import Util from '../library/util'
 
-import React from 'react'
+// import React from 'react'
 
 function translateJSON(response) {
   return response

@@ -4,7 +4,9 @@
   "private": true,
   "proxy": "http://localhost:3001/",
   "dependencies": {
+    "@material/react-button": "^0.10.0",
     "arwes": "^1.0.0-alpha.5",
+    "node-sass": "^4.11.0",
     "react": "^16.3.1",
     "react-dom": "^16.3.1",
     "react-pose": "^4.0.8",

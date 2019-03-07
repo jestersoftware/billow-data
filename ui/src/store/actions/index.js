@@ -27,27 +27,28 @@ function requestPosts(name) {
   }
 }
 
-function receivePosts(name, response) {
+function receivePosts(name, parent, response) {
   return {
     type: RECEIVE_POSTS,
     name,
+    parent,
     posts: response,
     receivedAt: Date.now()
   }
 }
 
-export function fetchPosts(name) {
+export function fetchPosts(name, parent) {
   return dispatch => {
     dispatch(requestPosts(name))
     // return fetch(`https://www.reddit.com/r/${subreddit}.json`)
     //   .then(response => response.json())
     //   .then(json => dispatch(receivePosts(subreddit, json)))
     return Api.submitRequest(
-      'databases',
-      '',
+      name,
+      parent,
       response => {
         // this.databasesResponse = response        
-        dispatch(receivePosts(name, response))
+        dispatch(receivePosts(name, parent, response))
       }
     )
 
