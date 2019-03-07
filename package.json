@@ -5,7 +5,7 @@
   "main": "server/server.js",
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "nodemon server/server.js",
+    "server": "nodemon --inspect server/server.js",
     "client": "node start-client.js",
     "agent": "set ELECTRON_START_URL=http://localhost:3000 && electron ."
   },
