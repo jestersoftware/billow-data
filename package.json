@@ -21,7 +21,7 @@
     "express": "^4.16.3",
     "graphql": "^14.1.1",
     "graphql-tools": "^4.0.4",
-    "mssql": "^4.1.0",
+    "mssql": "~5.0.0",
     "node-fetch": "^2.1.2",
     "winston": "^3.2.1"
   },
