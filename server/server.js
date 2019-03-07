@@ -58,6 +58,7 @@ function translateRequest(req, res) {
     id: Date.now().toString(),
     inProcess: false,
     complete: false,
+    error: false,
     name: req.query.name,
     parent: req.query.parent,
     res: res
@@ -92,6 +93,9 @@ app.get(
     if (request) {
       if (!request.name) {
         logger.log('error', '/api/requests %s %s', '**** 2. SERVER NOT SENDING REQUEST TO AGENT (INVALID REQUEST - [name] is empty) ****', request)
+
+        request.error = true
+        request.complete = true
 
         res.json({})
       }
