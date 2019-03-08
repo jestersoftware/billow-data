@@ -11,6 +11,7 @@ import SqlListContainer from './components/SqlListContainer'
 import SqlCommands from './components/SqlCommands'
 
 // import '@material/react-button/dist/button.css';
+import { Cell, Grid, Row } from '@material/react-layout-grid';
 
 // const MATCHING_ITEM_LIMIT = 25
 
@@ -55,12 +56,26 @@ import SqlCommands from './components/SqlCommands'
 //   ]
 // }
 
-const poseProps = {
-  visible: { opacity: 1 },
-  hidden: { opacity: 0 }
-}
+// const poseProps = {
+//   visible: { opacity: 1, color: 'red' },
+//   hidden: { opacity: 0.5, color: 'black' }
+// }
 
-const Box = posed.div(poseProps)
+// const Box = posed.div(poseProps)
+
+const Box = posed.div({
+  attention: {
+    scale: 1.3,
+    // transition: {
+    //   type: 'spring',
+    //   stiffness: 200,
+    //   damping: 0
+    // }
+  },
+  hidden: {
+    opacity: 0.5, color: 'rgb(0,0,0)'
+  }
+})
 
 // const DataContext = React.createContext(defaultResponse)
 
@@ -75,6 +90,28 @@ class App extends Component {
 
   componentDidMount() {
     // this.submitRequest()
+
+    setTimeout(
+      () => {
+        this.setState(
+          {
+            isVisible: true
+          }
+        )
+      },
+      2000
+    )
+
+    setTimeout(
+      () => {
+        this.setState(
+          {
+            isVisible: false
+          }
+        )
+      },
+      4000
+    )
   }
 
   // submitRequestDirect = () => {
@@ -148,40 +185,52 @@ class App extends Component {
   render() {
     // console.log('App render')
 
+    // className='App'
     return (
-            <div className='App'>
-              <header className='App-header'>
-                {/* <img src={logo} className='App-logo' alt='logo' /> */}
-                <img src='/img/logo-invert.png' className='App-logo' alt='logo' />
-                <span className='App-title'>Billow</span>
-                <Box
-                  className="box"
-                  pose={this.state.isVisible ? 'visible' : 'hidden'}
-                />
-              </header>
-              <SqlCommands />
-              <div>
-                  <div>
-                    <div style={{ marginBottom: 20 }}>
-                      <div>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                        sed do eiusmod tempor incididunt ut labore et dolore magna
-                        aliqua. Ut enim ad minim veniam, quis laboris nisi ut aliquip
-                        ex. Duis aute irure. Consectetur adipisicing elit, sed do
-                        eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        Ut enim ad minim veniam, quis nostrud.
-                      </div>
-                    </div>
-                    {/* <SqlList
-                        billow={this.state.databasesResponse}
-                      /> */}
-                    {/* <DataContext.Provider value={this.databasesResponse}>
-                      <SqlList />
-                    </DataContext.Provider> */}
-                    <SqlListContainer />
-                  </div>
-              </div>
+      <div className='flex-container vertical flex-child-auto'>
+        <div className='flex-child-fixed'>
+          <header className='App-header'>
+            {/* <img src={logo} className='App-logo' alt='logo' /> */}
+            <img src='/img/logo-invert.png' className='App-logo' alt='logo' />
+            <span className='App-title'>Billow</span>
+            <Box
+              className="box"
+              pose={this.state.isVisible ? 'attention' : 'hidden'}
+            />
+          </header>
+        </div>
+        <div className='flex-container horizontal flex-child-auto'>
+          <div className='flex-container vertical flex-child-fixed left-menu-container'>
+            <div className='flex-child-auto' style={{ backgroundColor: '#ddd' }}>
+              Sidebar
             </div>
+          </div>
+          <div className='flex-container vertical flex-child-auto'>
+            <div className='flex-child-fixed'>
+              <SqlCommands />
+            </div>
+            <div className='flex-child-auto'>
+              <div style={{ marginBottom: 20 }}>
+                <div>
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                  sed do eiusmod tempor incididunt ut labore et dolore magna
+                  aliqua. Ut enim ad minim veniam, quis laboris nisi ut aliquip
+                  ex. Duis aute irure. Consectetur adipisicing elit, sed do
+                  eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                  Ut enim ad minim veniam, quis nostrud.
+                </div>
+              </div>
+              {/* <SqlList
+                            billow={this.state.databasesResponse}
+                          /> */}
+              {/* <DataContext.Provider value={this.databasesResponse}>
+                          <SqlList />
+                        </DataContext.Provider> */}
+              <SqlListContainer />
+            </div>
+          </div>
+        </div>
+      </div>
     )
   }
 }

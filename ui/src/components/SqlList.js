@@ -9,6 +9,31 @@ import { fetchPosts } from '../store/actions/index'
 
 // import datasetCollectionMock from './SqlListMock'
 
+import Card, {
+  CardPrimaryContent,
+  CardMedia,
+  CardActions,
+  CardActionButtons,
+  CardActionIcons
+} from "@material/react-card"
+import Button from '@material/react-button'
+import IconButton from '@material/react-icon-button'
+import MaterialIcon from '@material/react-material-icon'
+import {
+  Body1,
+  Body2,
+  Caption,
+  Headline1,
+  Headline2,
+  Headline3,
+  Headline4,
+  Headline5,
+  Headline6,
+  Overline,
+  Subtitle1,
+  Subtitle2,
+} from '@material/react-typography';
+
 const _ = require('lodash')
 
 // export default function SelectedFoods(props) {
@@ -107,8 +132,6 @@ class SqlList extends Component {
 
     let { billow } = this.props
 
-    // const queryFirst = billow.queries[0]
-
     const queryDatabases = billow.queries.find(q => q.name === 'databases' || q.name === '')
 
     const queryTables = billow.queries.find(q => q.name === 'tables')
@@ -116,8 +139,6 @@ class SqlList extends Component {
     const databaseButtons = _.map(
       queryDatabases.values,
       (value, index) => {
-        // console.log('key', value.name)
-
         return (
           <button
             key={index}
@@ -129,57 +150,114 @@ class SqlList extends Component {
       }
     )
 
-
-    // let headers = queryFirst.fields // this.state.headers
-
-    // let dataset = _.map(queryFirst.values, value => _.values(value)) // this.state.dataset
-
-    // console.log('dataset', dataset)
-
     if (queryTables) {
-      // console.log('aaa')
+      const headers = queryTables.fields
 
-      // const queryTables = billow.queries[0]
+      const dataset = _.map(queryTables.values, value => _.values(value))
 
-      const headers = queryTables.fields // this.state.headers
-
-      const dataset = _.map(queryTables.values, value => _.values(value)) // this.state.dataset
-
-      const tableHeaders = _.map(
-        headers,
-        (value, index) => {
-          // console.log('key', value.name)
-  
-          return (
-            <th key={index}>
-              {value}
-            </th>
-          )
-        }
+      const tableHeaders = (
+        <thead>
+          <tr>
+            {
+              _.map(
+                headers,
+                (value, index) => {
+                  return (
+                    <th key={index}>
+                      {value}
+                    </th>
+                  )
+                }
+              )
+            }
+          </tr>
+        </thead>
       )
 
-      const tableRows = _.map(
-        dataset,
-        value => {
-          // console.log('key', value.name)
-  
-          return (
-            <tr key={value}>
-              {
-                _.map(
-                  value,
-                  (item, index) => {
-                    return (
-                      <td key={index}>
-                        {item}
-                      </td>
-                    )
-                  }
+      const tableRows = (
+        <tbody>
+          {
+            _.map(
+              dataset,
+              value => {
+                return (
+                  <tr key={value}>
+                    {
+                      _.map(
+                        value,
+                        (item, index) => {
+                          return (
+                            <td key={index}>
+                              {item}
+                            </td>
+                          )
+                        }
+                      )
+                    }
+                  </tr>
                 )
               }
-            </tr>
-          )
-        }
+            )
+          }
+        </tbody>
+      )
+
+      const table = (
+        <table>
+          {tableHeaders}
+          {tableRows}
+        </table>
+      )
+
+      let image = 'https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/2.jpg'
+
+      const list = (
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'stretch' }}>
+          {
+            _.map(
+              dataset,
+              (value, rowIndex) => {
+                return (
+                  <div
+                    key={rowIndex}
+                    style={{ margin: '5px' }}
+                  >
+                    <Card className='demo-card demo-ui-control'>
+                      <CardPrimaryContent className='demo-card__primary-action'>
+                        <CardMedia square imageUrl={image} className='demo-card__media' />
+                        <div className='demo-card__primary'>
+                          <Headline6 className='demo-card__title'>
+                            {value[0]}
+                          </Headline6>
+                          <Subtitle2 className='demo-card__subtitle'>
+                            {value[1]}
+                          </Subtitle2>
+                        </div>
+                      </CardPrimaryContent>
+                      <CardActions>
+                        <CardActionButtons>
+                          <Button>Read</Button>
+                          <Button>Bookmark</Button>
+                        </CardActionButtons>
+                        <CardActionIcons>
+                          <IconButton>
+                            <MaterialIcon icon='favorite_border' />
+                          </IconButton>
+                          <IconButton>
+                            <MaterialIcon icon='share' />
+                          </IconButton>
+                          <IconButton>
+                            <MaterialIcon icon='more_vert' />
+                          </IconButton>
+                        </CardActionIcons>
+                      </CardActions>
+                    </Card>
+                  </div>
+                )
+              }
+            )
+          }
+        </div>
       )
 
       return (
@@ -187,16 +265,8 @@ class SqlList extends Component {
           {databaseButtons}
           <div>
             <div style={{ padding: 20 }}>
-              <table>
-                <thead>
-                  <tr>
-                    {tableHeaders}
-                  </tr>
-                </thead>
-                <tbody>
-                  {tableRows}
-                </tbody>
-              </table>
+              {/* {table} */}
+              {list}
             </div>
 
             {/* 
