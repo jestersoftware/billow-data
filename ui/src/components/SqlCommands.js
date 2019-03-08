@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 
 import { connect } from 'react-redux'
 
-import { fetchPosts } from '../store/actions/index'
+import { fetchPosts, fetchPostsDirect } from '../store/actions/index'
 
-import Button from '@material/react-button';
+import Button from '@material/react-button'
 
 class SqlCommands extends Component {
 
@@ -74,7 +74,7 @@ class SqlCommands extends Component {
         <div className='App-button'>
           <Button
             raised
-            onClick={this.submitRequestDirect}
+            onClick={() => this.props.submitRequestDirect('databases', '')}
           >
             Agent Direct
           </Button>
@@ -94,7 +94,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-  submitRequest: (name, parent) => dispatch(fetchPosts(name, parent))
+  submitRequest: (name, parent) => dispatch(fetchPosts(name, parent)),
+  submitRequestDirect: (name, parent) => dispatch(fetchPostsDirect(name, parent))
 })
 
 export default connect(

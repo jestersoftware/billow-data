@@ -51,7 +51,23 @@ export function fetchPosts(name, parent) {
         dispatch(receivePosts(name, parent, response))
       }
     )
+  }
+}
 
+export function fetchPostsDirect(name, parent) {
+  return dispatch => {
+    dispatch(requestPosts(name))
+    // return fetch(`https://www.reddit.com/r/${subreddit}.json`)
+    //   .then(response => response.json())
+    //   .then(json => dispatch(receivePosts(subreddit, json)))
+    return Api.submitRequestDirect(
+      name,
+      parent,
+      response => {
+        // this.databasesResponse = response        
+        dispatch(receivePosts(name, parent, response))
+      }
+    )
   }
 }
 
