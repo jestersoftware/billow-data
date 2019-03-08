@@ -893,6 +893,25 @@
     "@material/theme" "^0.43.0"
     "@material/typography" "^0.43.0"
 
+"@material/card@^0.41.0":
+  version "0.41.1"
+  resolved "https://registry.yarnpkg.com/@material/card/-/card-0.41.1.tgz#962d282eb0a49c4539cb90efc916df45994a6ceb"
+  integrity sha512-0L3BkkHK9qRXNh9MOK4XkCYHmZcqwLK5gACIWSLDOjEefmifBeahJeDJSYLVHS9KWl43glIGSrpNGjyXs19mCQ==
+  dependencies:
+    "@material/elevation" "^0.41.0"
+    "@material/ripple" "^0.41.0"
+    "@material/rtl" "^0.40.1"
+    "@material/shape" "^0.41.0"
+    "@material/theme" "^0.41.0"
+
+"@material/elevation@^0.41.0":
+  version "0.41.0"
+  resolved "https://registry.yarnpkg.com/@material/elevation/-/elevation-0.41.0.tgz#db6b75ea43354fe35936cba2d78c55390faf4e9e"
+  integrity sha512-ZtZS8z5ie9c7Cx5PVudgSorGYa0C3lu3dA+Nn6qJdhGUokl01msh54NfNuwk+EZsk65bNRRqw1Td/63TCbKIzg==
+  dependencies:
+    "@material/animation" "^0.41.0"
+    "@material/theme" "^0.41.0"
+
 "@material/elevation@^0.43.0":
   version "0.43.0"
   resolved "https://registry.yarnpkg.com/@material/elevation/-/elevation-0.43.0.tgz#2fe9b0cac8ccfe26acb739ff57d5deb4d4fdcecc"
@@ -901,12 +920,64 @@
     "@material/animation" "^0.41.0"
     "@material/theme" "^0.43.0"
 
+"@material/icon-button@^0.41.0":
+  version "0.41.0"
+  resolved "https://registry.yarnpkg.com/@material/icon-button/-/icon-button-0.41.0.tgz#695c334232dd11266805c6196ac0a3ee95f37204"
+  integrity sha512-RzGSH97aUcTW4he+uU8ahT75DEn6+29L0hH4PBKe03/R/qHFfOrWfjfd03PPiCkaT5SNkPkt1YnfEPqKolnH1Q==
+  dependencies:
+    "@material/base" "^0.41.0"
+    "@material/ripple" "^0.41.0"
+    "@material/theme" "^0.41.0"
+
+"@material/layout-grid@^0.41.0":
+  version "0.41.0"
+  resolved "https://registry.yarnpkg.com/@material/layout-grid/-/layout-grid-0.41.0.tgz#2e7d3be76313e0684d573b10c2c6a88b3230d251"
+  integrity sha512-Sa5RNoTGgfIojqJ9E94p7/k11V6q/tGk7HwKi4AQNAPjxield0zcl3G/SbsSb8YSHoK+D+7OXDN+n11x6EqF7g==
+
 "@material/react-button@^0.10.0":
   version "0.10.0"
   resolved "https://registry.yarnpkg.com/@material/react-button/-/react-button-0.10.0.tgz#8c4166d42bc598f2137e4696d8cd293d4d3827c7"
   integrity sha512-gzGV6sbqPnu78Anw6nRrK1caBKDREIdOTgLMMyhMZjKlqEcg6FcF56foI0hEv0rQRppBjCCmsuUiXil+LqMSTw==
   dependencies:
     "@material/button" "^0.43.0"
+    "@material/react-ripple" "^0.10.0"
+    classnames "^2.2.5"
+    react "^16.4.2"
+
+"@material/react-card@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@material/react-card/-/react-card-0.10.0.tgz#869ee6f59eb5ac6f9bf330d4951309f9753a4e93"
+  integrity sha512-muLo3gVJUmNEhEnzkrVEILSnU5+CD7CEbIANmM47azXdkOwW6kvTIHOZCGaA06vvK0lhye2cjsya1KlHCmtcnA==
+  dependencies:
+    "@material/card" "^0.41.0"
+    "@material/react-ripple" "^0.10.0"
+    classnames "^2.2.5"
+    react "^16.4.2"
+
+"@material/react-icon-button@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@material/react-icon-button/-/react-icon-button-0.10.0.tgz#c8510bbe44ea0db847e64aa9786e35ea3f7203de"
+  integrity sha512-7tPeAUwZYAfd1BTKijY4IAX8GWLrEJvJIpY+u+kXy5VkwkJLiUwMExQ9hRjciWpesvg2sUQ1YcJbDWbiyf6meQ==
+  dependencies:
+    "@material/icon-button" "^0.41.0"
+    "@material/react-ripple" "^0.10.0"
+    classnames "^2.2.5"
+    react "^16.3.2"
+
+"@material/react-layout-grid@^0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@material/react-layout-grid/-/react-layout-grid-0.8.0.tgz#b0f73a3342b56badb0be4fe40b2f969962ca8263"
+  integrity sha512-fRjAF3vltejpI8ffSS01UJDdeBv8mwNbLIR6Qu8bMP9PE78C4hwZpUeols1eYCEU2VQlUGaMADSgnA1lbQG1jg==
+  dependencies:
+    "@material/layout-grid" "^0.41.0"
+    classnames "^2.2.5"
+    react "^16.4.2"
+
+"@material/react-material-icon@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@material/react-material-icon/-/react-material-icon-0.10.0.tgz#389db97dc6acd1f4437e2c3b4e1dab95ead9a94e"
+  integrity sha512-nO5bY2EGjnKOjW4UFjIWbQ1Bxzoj13CbKB/YgTGKZu+LUkrX9uk+A1nkMpewyOJBLkA0bvzoIeRr1wy668Fmww==
+  dependencies:
     "@material/react-ripple" "^0.10.0"
     classnames "^2.2.5"
     react "^16.4.2"
@@ -920,6 +991,15 @@
     classnames "^2.2.5"
     react "^16.4.2"
     utility-types "^3.2.1"
+
+"@material/react-typography@^0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@material/react-typography/-/react-typography-0.8.0.tgz#8fe1dc13545daf7d87d6c0bcd27360c8a9c1964a"
+  integrity sha512-3krNSNISm1du4US9FxoD9XKrQHVp3vLeQDkJ2qsGYmtQp3H1930Spq9b8HRlW6/d1inp/yl71jvz32Q43CIlqQ==
+  dependencies:
+    "@material/typography" "^0.41.0"
+    classnames "^2.2.5"
+    react "^16.4.2"
 
 "@material/ripple@^0.41.0":
   version "0.41.0"
@@ -939,10 +1019,20 @@
     "@material/base" "^0.41.0"
     "@material/theme" "^0.43.0"
 
+"@material/rtl@^0.40.1":
+  version "0.40.1"
+  resolved "https://registry.yarnpkg.com/@material/rtl/-/rtl-0.40.1.tgz#5b0d973e3c6f8e2ea3656c06ada37ba2fedfa206"
+  integrity sha512-Pk6Iw1/KrhWZoZtkDsPMDUW0bm7Z1zeXb3MTQRCFmjf1wU5cRxgOTtuoZLcJqlcKGppLAzJL/TJV3E7KEiuL0A==
+
 "@material/rtl@^0.42.0":
   version "0.42.0"
   resolved "https://registry.yarnpkg.com/@material/rtl/-/rtl-0.42.0.tgz#1836e78186c2d8b996f6fbf97adab203535335bc"
   integrity sha512-VrnrKJzhmspsN8WXHuxxBZ69yM5IwhCUqWr1t1eNfw3ZEvEj7i1g3P31HGowKThIN1dc1Wh4LE14rCISWCtv5w==
+
+"@material/shape@^0.41.0":
+  version "0.41.0"
+  resolved "https://registry.yarnpkg.com/@material/shape/-/shape-0.41.0.tgz#2b1cb9a9e1240965ae25a107bbd6e29ca0257583"
+  integrity sha512-k1K3CjOVxclfb/0r28cOa2oJpP7QMA2fP0SOS3Vh8ale5Q2jkaHTL60KX8VkHvV6rMqShpXW+60gPjoz5XRbDQ==
 
 "@material/shape@^0.43.0":
   version "0.43.0"
@@ -958,6 +1048,11 @@
   version "0.43.0"
   resolved "https://registry.yarnpkg.com/@material/theme/-/theme-0.43.0.tgz#6d9fa113c82e841817882172c152d60d2d203ca6"
   integrity sha512-/zndZL6EihI18v2mYd4O8xvOBAAXmLeHyHVK28LozSAaJ9okQgD25wq5Ktk95oMTmPIC+rH66KcK6371ivNk8g==
+
+"@material/typography@^0.41.0":
+  version "0.41.0"
+  resolved "https://registry.yarnpkg.com/@material/typography/-/typography-0.41.0.tgz#645e0199bdba6b09d935352ab2095d07c33ec395"
+  integrity sha512-15dlqSU+9uGcWdg4KXXcmDzTKJPb7/5Z9kmooONb2Laot1uiuntDXQS0yL+U2FYLW5Ros+WVMosDBKFruWx68A==
 
 "@material/typography@^0.43.0":
   version "0.43.0"
@@ -8713,7 +8808,7 @@ react-transition-group@^2.2.1:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
-react@^16.3.1, react@^16.4.2:
+react@^16.3.1, react@^16.3.2, react@^16.4.2:
   version "16.8.4"
   resolved "https://registry.yarnpkg.com/react/-/react-16.8.4.tgz#fdf7bd9ae53f03a9c4cd1a371432c206be1c4768"
   integrity sha512-0GQ6gFXfUH7aZcjGVymlPOASTuSjlQL4ZtVC5YKH+3JL6bBLCVO21DknzmaPlI90LN253ojj02nsapy+j7wIjg==
