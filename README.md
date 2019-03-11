@@ -4,18 +4,22 @@ Welcome to Billow.
 
 ## Global Dependencies
 
-Node (include build tools including VS, Python, Chocolatey)
-Yarn
+* Node (include build tools: VS, Python, Chocolatey)
+* Yarn
 
 ## To run project
 
-Terminal 1:
+### Terminal 1:
+```
 SET SASS_PATH=.\node_modules
 yarn start
+```
 
-Terminal 2:
+### Terminal 2:
+```
 SET PORT=3333
 yarn run agent
+```
 
 ## References
 
