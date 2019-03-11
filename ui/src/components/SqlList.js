@@ -132,28 +132,36 @@ class SqlList extends Component {
 
     let { billow } = this.props
 
-    const queryDatabases = billow.queries.find(q => q.name === 'databases' || q.name === '')
+    const queryDatabases = billow.queries.find(q => q.name === 'databases')
 
     const queryTables = billow.queries.find(q => q.name === 'tables')
 
-    const databaseButtons = _.map(
-      queryDatabases.values,
-      (value, index) => {
-        return (
-          <button
-            key={index}
-            onClick={() => this.props.submitRequest('tables', value.name)}
-          >
-            {value.name}
-          </button>
-        )
-      }
-    )
+    const queryColumns = billow.queries.find(q => q.name === 'columns')
+
+    let databaseButtons = null
+    let table = null
+    let list = null
+
+    if (queryDatabases) {
+      databaseButtons = _.map(
+        queryDatabases.values,
+        (value, index) => {
+          const databaseName = _.join(_.map(queryDatabases.mappedFields.name, n => value[n]), ' ')
+
+          return (
+            <button
+              key={index}
+              onClick={() => this.props.submitRequest('tables', databaseName) }
+            >
+              {databaseName}
+            </button>
+          )
+        }
+      )
+    }
 
     if (queryTables) {
-      const headers = queryTables.fields
-
-      const dataset = _.map(queryTables.values, value => _.values(value))
+      const headers = _.keys(queryTables.mappedFields)
 
       const tableHeaders = (
         <thead>
@@ -178,17 +186,17 @@ class SqlList extends Component {
         <tbody>
           {
             _.map(
-              dataset,
-              value => {
+              queryTables.values,
+              (value, index) => {
                 return (
-                  <tr key={value}>
+                  <tr key={index}>
                     {
                       _.map(
-                        value,
+                        headers,
                         (item, index) => {
                           return (
                             <td key={index}>
-                              {item}
+                              { _.join(_.map(queryTables.mappedFields[item], n => value[n]), ' ') }
                             </td>
                           )
                         }
@@ -202,7 +210,7 @@ class SqlList extends Component {
         </tbody>
       )
 
-      const table = (
+      table = (
         <table>
           {tableHeaders}
           {tableRows}
@@ -211,15 +219,15 @@ class SqlList extends Component {
 
       let image = 'https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/2.jpg'
 
-      const list = (
+      list = (
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'stretch' }}>
           {
             _.map(
-              dataset,
-              (value, rowIndex) => {
+              queryTables.values,
+              (queryTableValue, index) => {
                 return (
                   <div
-                    key={rowIndex}
+                    key={index}
                     style={{ margin: '5px' }}
                   >
                     <Card className='demo-card demo-ui-control'>
@@ -227,10 +235,22 @@ class SqlList extends Component {
                         <CardMedia square imageUrl={image} className='demo-card__media' />
                         <div className='demo-card__primary'>
                           <Headline6 className='demo-card__title'>
-                            {value[0]}
+                            { _.join(_.map(queryTables.mappedFields['name'], n => queryTableValue[n]), ' ') }
                           </Headline6>
                           <Subtitle2 className='demo-card__subtitle'>
-                            {value[1]}
+                            {
+                              queryColumns ?
+                                _.join(
+                                  _.map(
+                                    _.filter(
+                                      queryColumns.values, 
+                                      queryColumnValue => _.join(_.map(queryColumns.mappedFields['parentid'], n => queryColumnValue[n]), '') === _.join(_.map(queryTables.mappedFields['id'], n => queryTableValue[n]), ' ')
+                                    ),
+                                    queryColumnValue => _.join(_.map(queryColumns.mappedFields['name'], n => queryColumnValue[n]), ' ')
+                                  )
+                                )
+                                : _.join(_.map(queryTables.mappedFields['id'], n => queryTableValue[n]), '')
+                            }
                           </Subtitle2>
                         </div>
                       </CardPrimaryContent>
@@ -259,57 +279,19 @@ class SqlList extends Component {
           }
         </div>
       )
+    }
 
-      return (
+    return (
+      <div>
+        {databaseButtons}
         <div>
-          {databaseButtons}
-          <div>
-            <div style={{ padding: 20 }}>
-              {/* {table} */}
-              {list}
-            </div>
-
-            {/* 
-          <table className="ui selectable structured large table">
-            <thead>
-              <tr>
-                <th colSpan="5">
-                  <h3>SQL Clients</h3>
-                </th>
-              </tr>
-              <tr>
-                <th className="eight wide">Name</th>
-                <th>Comment</th>
-                <th>Phone</th>
-                <th>Contact</th>
-              </tr>
-            </thead>
-            <tbody>
-              {foodRows}
-            </tbody>
-            <tfoot>
-              <tr>
-                <th>Total</th>
-                <th className="right aligned" id="total-kcal">
-                  {sum(foods, "kcal")}
-                </th>
-                <th className="right aligned" id="total-protein_g">
-                  {sum(foods, "protein_g")}
-                </th>
-                <th className="right aligned" id="total-fat_g">
-                  {sum(foods, "fat_g")}
-                </th>
-              </tr>
-            </tfoot>
-          </table> 
-          */}
+          <div style={{ padding: 20 }}>
+            {table}
+            {list}
           </div>
         </div>
-      )
-    }
-    else {
-      return databaseButtons
-    }
+      </div>
+    )
   }
 }
 

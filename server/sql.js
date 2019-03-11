@@ -8,7 +8,6 @@ const baseConfig = {
   user: 'sa',
   password: 'Password123',
   server: '10.0.0.41', // You can use 'localhost\\instance' to connect to named instance
-  // database: 'sehtechdb',
   database: 'master',
 
   // options: {
@@ -74,7 +73,9 @@ function translateErrorToBillow(error, queries) {
   }
 }
 
-function runQuery(config, query, callback) {
+function runQuery(config, queries, callback) {
+  const query = _.join(_.map(queries, q => q.query), ';')
+
   mssql
     .connect(config)
     .then(pool => {
@@ -85,7 +86,7 @@ function runQuery(config, query, callback) {
 
       mssql.close()
 
-      const translatedResult = translateSqlToBillow(result, [{ query: query }])
+      const translatedResult = translateSqlToBillow(result, queries)
 
       callback && callback(translatedResult)
     }).catch(error => {
@@ -93,7 +94,7 @@ function runQuery(config, query, callback) {
 
       mssql.close()
 
-      const translatedResult = translateErrorToBillow(error, [{ query: query }])
+      const translatedResult = translateErrorToBillow(error, queries)
 
       callback && callback(translatedResult)
     })
@@ -103,7 +104,7 @@ function runQuery(config, query, callback) {
   })
 }
 
-function getSqlDatabaseList(parent, callback) {
+function getSqlDatabaseList(name, parent, callback) {
 
   // async () => {
   //   try {
@@ -119,7 +120,18 @@ function getSqlDatabaseList(parent, callback) {
 
   // const config = baseConfig
 
-  const query = 'SELECT * FROM sys.databases'
+  const queries = [
+    {
+      name: name,
+      parent: parent,
+      query: 'SELECT * FROM [sys].[databases]',
+      mappedFields:
+      {
+        id: ['database_id'],
+        name: ['name']
+      }
+    }
+  ]
 
   // mssql.connect(config).then(pool => {
   //   return pool.request().query(query)
@@ -162,15 +174,38 @@ function getSqlDatabaseList(parent, callback) {
   //   logger.log('error', 'getSqlDatabaseList', '**** SQL ERROR ****', 'Error: ', error)
   // })
 
-  runQuery(baseConfig, query, callback)
+  runQuery(baseConfig, queries, callback)
 }
 
-function getSqlTableList(parent, callback) {
+function getSqlTableList(name, parent, callback) {
   const config = Object.assign({}, baseConfig, { database: parent })
 
-  const query = 'SELECT * FROM sys.tables'
+  const queries = [
+    {
+      name: name,
+      parent: parent,
+      query: 'SELECT * FROM [INFORMATION_SCHEMA].[TABLES]',
+      mappedFields:
+      {
+        parentid:  ['TABLE_CATALOG'],
+        id: ['TABLE_NAME'],
+        name: ['TABLE_NAME']
+      }
+    },
+    {
+      name: 'columns',
+      parent: parent,
+      query: 'SELECT * FROM [INFORMATION_SCHEMA].[COLUMNS]',
+      mappedFields:
+      {
+        parentid:  ['TABLE_NAME'],
+        id: ['TABLE_NAME', 'COLUMN_NAME'],
+        name: ['COLUMN_NAME']
+      }
+    }
+  ]
 
-  runQuery(config, query, callback)
+  runQuery(config, queries, callback)
 }
 
 module.exports = { getSqlDatabaseList, getSqlTableList, translateSqlToBillow }

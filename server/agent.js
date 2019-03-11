@@ -31,14 +31,14 @@ function fulfillRequest(request, result) {
 }
 
 function processRequest(request, callback) {
-  if (request.name) {
+  if (request && request.name) {
     logger.log('info', 'processRequest %s %s %s', '**** AGENT PROCESSING REQUEST ****', request.id, request.name)
 
     if (request.name === 'databases') {
-      sql.getSqlDatabaseList(request.parent, result => callback(request, result))
+      sql.getSqlDatabaseList(request.name, request.parent, result => callback(request, result))
     }
     else if (request.name === 'tables' && request.parent) {
-      sql.getSqlTableList(request.parent, result => callback(request, result))
+      sql.getSqlTableList(request.name, request.parent, result => callback(request, result))
     }
     else {
       logger.log('warn', 'processRequest %s %s', '**** AGENT RECEIVED UNKNOWN REQUEST ****', request)
