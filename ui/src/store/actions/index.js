@@ -1,25 +1,9 @@
-// import fetch from 'cross-fetch'
-import Api/* , {defaultResponse, DataContext} */ from '../../api/Api'
+import Api from '../../api/Api'
 
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
-// export const SELECT_SUBREDDIT = 'SELECT_SUBREDDIT'
-// export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
-// ​
-// export function selectSubreddit(subreddit) {
-//   return {
-//     type: SELECT_SUBREDDIT,
-//     subreddit
-//   }
-// }
-// ​
-// export function invalidateSubreddit(subreddit) {
-//   return {
-//     type: INVALIDATE_SUBREDDIT,
-//     subreddit
-//   }
-// }
-// ​
+export const TOGGLE_DIRECT = 'TOGGLE_DIRECT'
+
 function requestPosts(name) {
   return {
     type: REQUEST_POSTS,
@@ -71,4 +55,8 @@ export function fetchPostsDirect(name, parent) {
   }
 }
 
-// export default fetchPosts
+export function toggleDirect() {
+  return {
+    type: TOGGLE_DIRECT
+  }
+}

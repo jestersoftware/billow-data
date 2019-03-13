@@ -2,98 +2,43 @@ import React, { Component } from 'react'
 
 import { connect } from 'react-redux'
 
-import { fetchPosts, fetchPostsDirect } from '../store/actions/index'
+import { fetchPosts, fetchPostsDirect, toggleDirect } from '../store/actions/index'
 
 import Button from '@material/react-button'
 
+import { Checkbox } from "@blueprintjs/core"
+
 class SqlCommands extends Component {
 
-  submitRequestDirect = () => {
-    //   this.setState(
-    //     {
-    //       databasesResponse: defaultResponse,
-    //       requestStatus: 'sending request directly',
-    //       isVisible: false
-    //     }
-    //   )
-
-    //   Api.submitRequestDirect(
-    //     'databases',
-    //     '',
-    //     response => {
-    //       this.setState(
-    //         {
-    //           databasesResponse: response,
-    //           requestStatus: 'successful response from direct request',
-    //           isVisible: true
-    //         }
-    //       )
-    //     }
-    //   )
-  }
-
-  // submitRequest = () => {
-  //   this.setState(
-  //     {
-  //       databasesResponse: defaultResponse,
-  //       requestStatus: 'sending request by proxy',
-  //       isVisible: false
-  //     }
-  //   )
-
-  //   Api.submitRequest(
-  //     'databases',
-  //     '',
-  //     response => {
-  //       this.setState(
-  //         {
-  //           databasesResponse: response, //.recordset.slice(0, MATCHING_ITEM_LIMIT),
-  //           requestStatus: 'successful response from proxy request',
-  //           isVisible: true
-  //         }
-  //       )
-  //     }
-  //   )
-  // }
-
-
   render() {
-    // console.log('sqlcommands', this.props)
-
     return (
-      <div className='App-buttons'>
+      <div className='flex-container App-buttons'>
         <div className='App-button'>
           <Button
             raised
             className='button-alternate'
-            onClick={() => this.props.submitRequest('databases', '')}
+            onClick={() => this.props.globalState.isEnabled ? this.props.submitRequestDirect('databases', '') : this.props.submitRequest('databases', '')}
           >
             Submit Request
           </Button>
         </div>
         <div className='App-button'>
-          <Button
-            raised
-            onClick={() => this.props.submitRequestDirect('databases', '')}
-          >
-            Agent Direct
-          </Button>
+          <Checkbox checked={this.props.globalState.isEnabled} label="Enabled" onChange={this.props.toggleDirect} />
         </div>
         <div>
-          Request: {this.props.billow.requestStatus || ''}
+          Request: {this.props.globalState.status || ''}
         </div>
       </div>
     )
   }
 }
 
-
-
 const mapStateToProps = state => ({
-  billow: state // getVisibleTodos(state.todos, state.visibilityFilter)
+  globalState: state
 })
 
 const mapDispatchToProps = dispatch => ({
+  toggleDirect: () => dispatch(toggleDirect()),
   submitRequest: (name, parent) => dispatch(fetchPosts(name, parent)),
   submitRequestDirect: (name, parent) => dispatch(fetchPostsDirect(name, parent))
 })

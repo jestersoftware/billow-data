@@ -3,11 +3,7 @@ import PropTypes from 'prop-types'
 
 import { connect } from 'react-redux'
 
-import { fetchPosts } from '../store/actions/index'
-
-// import Api, { DataContext } from '../api/Api'
-
-// import datasetCollectionMock from './SqlListMock'
+import { fetchPosts, fetchPostsDirect } from '../store/actions/index'
 
 import Card, {
   CardPrimaryContent,
@@ -20,6 +16,7 @@ import Button from '@material/react-button'
 import IconButton from '@material/react-icon-button'
 import MaterialIcon from '@material/react-material-icon'
 import {
+  /* 
   Body1,
   Body2,
   Caption,
@@ -27,10 +24,13 @@ import {
   Headline2,
   Headline3,
   Headline4,
-  Headline5,
+  Headline5, 
+  */
   Headline6,
+  /* 
   Overline,
-  Subtitle1,
+  Subtitle1, 
+  */
   Subtitle2,
 } from '@material/react-typography';
 
@@ -38,105 +38,13 @@ const _ = require('lodash')
 
 // export default function SelectedFoods(props) {
 class SqlList extends Component {
-  // constructor(props) {
-  //   super(props)
-
-  //   // this.state = {
-  //   //   // tablesResponse: null //,
-  //   //   databases: null,
-  //   //   tables: null
-  //   //   // headers:
-  //   //   //   [
-  //   //   //     'Prop name',
-  //   //   //     'Type',
-  //   //   //     'Default',
-  //   //   //     'Description'
-  //   //   //   ],
-  //   //   // dataset:
-  //   //   //   [
-  //   //   //     ['name', 'string', '\'\'', 'The base name of the component'],
-  //   //   //     ['age', 'number', '0', 'The age of the component'],
-  //   //   //     ['married', 'bool', 'false', 'If the component is married'],
-  //   //   //   ]
-  //   // }
-  // }
-
-  // state = {
-  //   sql: [],
-  //   request: ''
-  // }
-
-  // const { foods } = props
-
-
-  // const foodRows = foods.map((food, idx) => (
-  //   <tr key={idx} onClick={() => props.onFoodClick(idx)}>
-  //     <td>{food.name || food.NAME}</td>
-  //     <td className="right aligned">{food.COMMENT}</td>
-  //     <td className="right aligned">{food.PHONE}</td>
-  //     <td className="right aligned">{food.CONTACT_NAME}</td>
-  //   </tr>
-  // ))
-
-  // submitRequest = (databaseId) => {
-  //   Api.submitRequest(
-  //     'tables',
-  //     databaseId,
-  //     response => {
-  //       this.setState(
-  //         {
-  //           tablesResponse: response
-  //         }
-  //       )
-  //     }
-  //   )
-  // }
 
   render() {
-    // console.log('props', this.props)
-    // console.log('SqlList render')
+    const queryDatabases = this.props.globalState.queries.find(q => q.name === 'databases')
 
+    const queryTables = this.props.globalState.queries.find(q => q.name === 'tables')
 
-    // return (
-    //   <DataContext.Consumer>
-    //     {
-    //       value => {
-    //         // let { billow } = this.props
-
-    //         const queryFirst = value.queries[0]
-
-    //         return _.map(
-    //           queryFirst.values,
-    //           value1 => {
-    //             // console.log('key', value.name)
-
-    //             return (
-    //               <Button
-    //                 key={value1.name}
-    //                 animate
-    //                 onClick={() => this.submitRequest(value1.name)}
-    //               >
-    //                 {value1.name}
-    //               </Button>
-    //             )
-    //           }
-    //         )
-
-    //       }
-    //     }
-    //   </DataContext.Consumer>
-    // )
-
-
-
-
-    let { billow } = this.props
-
-    const queryDatabases = billow.queries.find(q => q.name === 'databases')
-
-    const queryTables = billow.queries.find(q => q.name === 'tables')
-
-    const queryColumns = billow.queries.find(q => q.name === 'columns')
+    const queryColumns = this.props.globalState.queries.find(q => q.name === 'columns')
 
     let databaseButtons = null
     let table = null
@@ -151,7 +59,7 @@ class SqlList extends Component {
           return (
             <button
               key={index}
-              onClick={() => this.props.submitRequest('tables', databaseName) }
+              onClick={() => this.props.globalState.isEnabled ? this.props.submitRequestDirect('tables', databaseName) : this.props.submitRequest('tables', databaseName) }
             >
               {databaseName}
             </button>
@@ -296,23 +204,12 @@ class SqlList extends Component {
 }
 
 SqlList.propTypes = {
-  billow: PropTypes.object
+  globalState: PropTypes.object
 }
 
-// function sum(foods, prop) {
-//   return foods
-//     .reduce((memo, food) => parseInt(food[prop], 10) + memo, 0.0)
-//     .toFixed(2)
-// }
-
-// export default SqlList
-
-// const mapStateToProps = state => ({
-//   billow: state // getVisibleTodos(state.todos, state.visibilityFilter)
-// })
-
 const mapDispatchToProps = dispatch => ({
-  submitRequest: (name, parent) => dispatch(fetchPosts(name, parent))
+  submitRequest: (name, parent) => dispatch(fetchPosts(name, parent)),
+  submitRequestDirect: (name, parent) => dispatch(fetchPostsDirect(name, parent))
 })
 
 export default connect(

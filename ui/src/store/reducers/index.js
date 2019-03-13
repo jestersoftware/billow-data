@@ -1,15 +1,16 @@
 // import { combineReducers } from 'redux'
+
 import {
-  // SELECT_SUBREDDIT,
-  // INVALIDATE_SUBREDDIT,
   REQUEST_POSTS,
-  RECEIVE_POSTS
+  RECEIVE_POSTS,
+  TOGGLE_DIRECT
 } from '../actions/index'
 
 const _ = require('lodash')
 
 function posts(
   state = {
+    isEnabled: false,
     status: "loading",
     queries: [
       {
@@ -31,48 +32,41 @@ function posts(
   action
 ) {
   switch (action.type) {
-    // case INVALIDATE_SUBREDDIT:
-    //   return Object.assign({}, state, {
-    //     didInvalidate: true
-    //   })
+    case TOGGLE_DIRECT:
+      return Object.assign({}, state, {
+        isEnabled: !state.isEnabled
+      })
     case REQUEST_POSTS:
-      // return Object.assign({}, state, {
-      //   isFetching: true,
-      //   didInvalidate: false
-      // })
-      return state
+      return Object.assign({}, state, {
+        status: 'request made'
+      })
     case RECEIVE_POSTS:
-      // return Object.assign({}, state, {
-      //   isFetching: false,
-      //   didInvalidate: false,
-      //   items: action.posts,
-      //   lastUpdated: action.receivedAt
-      // })
-
       // For each query 
       // 1) find existing query with same name and update
       // or
-      // 2) create a new query
+      // 2) find blank query (default) and update
+      // or
+      // 3) create a new query
       _.each(
-        action.posts.queries, 
+        action.posts.queries,
         query => {
           let queryToUpdate = state.queries.find(stateQuery => stateQuery.query === query.query)
 
           if (queryToUpdate) {
-            Object.assign(queryToUpdate, /* { name: action.name, parent: action.parent }, */ query)
+            Object.assign(queryToUpdate, query)
           }
           else {
             // Find 'blank' query
             queryToUpdate = state.queries.find(stateQuery => stateQuery.query === '')
 
             if (queryToUpdate) {
-              Object.assign(queryToUpdate, /* { name: action.name, parent: action.parent }, */ query)
+              Object.assign(queryToUpdate, query)
             }
             else {
               // Create a new query
               queryToUpdate = {}
 
-              Object.assign(queryToUpdate, /* { name: action.name, parent: action.parent }, */ query)
+              Object.assign(queryToUpdate, query)
 
               state.queries.push(queryToUpdate)
             }
@@ -80,7 +74,7 @@ function posts(
         }
       )
 
-      return Object.assign({}, state)
+      return Object.assign({}, state, { status: 'loaded' })
     default:
       return state
   }
