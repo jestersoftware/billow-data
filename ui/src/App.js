@@ -5,15 +5,8 @@ import posed/* , { PoseGroup } */ from 'react-pose'
 // import logo from './logo.svg'
 import './App.scss'
 
-// import Api/* , {defaultResponse, DataContext} */ from './api/Api'
-
 import SqlListContainer from './components/SqlListContainer'
 import SqlCommands from './components/SqlCommands'
-
-// import '@material/react-button/dist/button.css';
-import { Cell, Grid, Row } from '@material/react-layout-grid';
-
-// const MATCHING_ITEM_LIMIT = 25
 
 // const mySounds = {
 //   shared: { volume: 1, },  // Shared sound settings
@@ -44,18 +37,6 @@ import { Cell, Grid, Row } from '@material/react-layout-grid';
 //   }
 // }
 
-// const defaultResponse = {
-//   status: "loading",
-//   queries: [
-//     {
-//       count: 0,
-//       query: "none",
-//       fields: ["name"],
-//       values: [{ name: "Loading..." }]
-//     }
-//   ]
-// }
-
 // const poseProps = {
 //   visible: { opacity: 1, color: 'red' },
 //   hidden: { opacity: 0.5, color: 'black' }
@@ -77,20 +58,13 @@ const Box = posed.div({
   }
 })
 
-// const DataContext = React.createContext(defaultResponse)
-
 class App extends Component {
-  // databasesResponse = defaultResponse
 
   state = {
-    // databasesResponse: defaultResponse,
-    // requestStatus: '',
     isVisible: false
   }
 
   componentDidMount() {
-    // this.submitRequest()
-
     setTimeout(
       () => {
         this.setState(
@@ -114,78 +88,7 @@ class App extends Component {
     )
   }
 
-  // submitRequestDirect = () => {
-  //   this.setState(
-  //     {
-  //       databasesResponse: defaultResponse,
-  //       requestStatus: 'sending request directly',
-  //       isVisible: false
-  //     }
-  //   )
-
-  //   Api.submitRequestDirect(
-  //     'databases',
-  //     '',
-  //     response => {
-  //       this.setState(
-  //         {
-  //           databasesResponse: response,
-  //           requestStatus: 'successful response from direct request',
-  //           isVisible: true
-  //         }
-  //       )
-  //     }
-  //   )
-  // }
-
-  // submitRequest = () => {
-  //   this.setState(
-  //     {
-  //       databasesResponse: defaultResponse,
-  //       requestStatus: 'sending request by proxy',
-  //       isVisible: false
-  //     }
-  //   )
-
-  //   Api.submitRequest(
-  //     'databases',
-  //     '',
-  //     response => {
-  //       this.setState(
-  //         {
-  //           databasesResponse: response, //.recordset.slice(0, MATCHING_ITEM_LIMIT),
-  //           requestStatus: 'successful response from proxy request',
-  //           isVisible: true
-  //         }
-  //       )
-  //     }
-  //   )
-  // }
-
-  // submitRequestDirect = () => {
-  //   Api.submitRequestDirect(
-  //     'databases',
-  //     '',
-  //     response => {
-  //       this.databasesResponse = response        
-  //     }
-  //   )
-  // }
-
-  // submitRequest = () => {
-  //   Api.submitRequest(
-  //     'databases',
-  //     '',
-  //     response => {
-  //       this.databasesResponse = response        
-  //     }
-  //   )
-  // }  
-
   render() {
-    // console.log('App render')
-
-    // className='App'
     return (
       <div className='flex-container vertical flex-child-auto'>
         <div className='flex-child-fixed'>
@@ -220,12 +123,6 @@ class App extends Component {
                   Ut enim ad minim veniam, quis nostrud.
                 </div>
               </div>
-              {/* <SqlList
-                            billow={this.state.databasesResponse}
-                          /> */}
-              {/* <DataContext.Provider value={this.databasesResponse}>
-                          <SqlList />
-                        </DataContext.Provider> */}
               <SqlListContainer />
             </div>
           </div>
