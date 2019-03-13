@@ -4,6 +4,7 @@
   "private": true,
   "proxy": "http://localhost:3001/",
   "dependencies": {
+    "@blueprintjs/core": "^3.14.1",
     "@material/react-button": "^0.10.0",
     "@material/react-card": "^0.10.0",
     "@material/react-icon-button": "^0.10.0",
