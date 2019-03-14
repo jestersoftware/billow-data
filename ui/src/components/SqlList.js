@@ -5,41 +5,38 @@ import { connect } from 'react-redux'
 
 import { fetchPosts, fetchPostsDirect } from '../store/actions/index'
 
-import Card, {
-  CardPrimaryContent,
-  CardMedia,
-  CardActions,
-  CardActionButtons,
-  CardActionIcons
-} from "@material/react-card"
-import Button from '@material/react-button'
-import IconButton from '@material/react-icon-button'
-import MaterialIcon from '@material/react-material-icon'
-import {
-  /* 
-  Body1,
-  Body2,
-  Caption,
-  Headline1,
-  Headline2,
-  Headline3,
-  Headline4,
-  Headline5, 
-  */
-  Headline6,
-  /* 
-  Overline,
-  Subtitle1, 
-  */
-  Subtitle2,
-} from '@material/react-typography';
+import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+
+import Button from '@material-ui/core/Button'
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 const _ = require('lodash')
 
-// export default function SelectedFoods(props) {
+const styles = {
+  card: {
+    width: 300,
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+};
+
 class SqlList extends Component {
 
   render() {
+    const { classes } = this.props;
+
     const queryDatabases = this.props.globalState.queries.find(q => q.name === 'databases')
 
     const queryTables = this.props.globalState.queries.find(q => q.name === 'tables')
@@ -57,12 +54,14 @@ class SqlList extends Component {
           const databaseName = _.join(_.map(queryDatabases.mappedFields.name, n => value[n]), ' ')
 
           return (
-            <button
+            <Button
               key={index}
+              variant="contained" 
+              color="primary"
               onClick={() => this.props.globalState.isEnabled ? this.props.submitRequestDirect('tables', databaseName) : this.props.submitRequest('tables', databaseName) }
             >
               {databaseName}
-            </button>
+            </Button>
           )
         }
       )
@@ -72,60 +71,60 @@ class SqlList extends Component {
       const headers = _.keys(queryTables.mappedFields)
 
       const tableHeaders = (
-        <thead>
-          <tr>
+        <TableHead>
+          <TableRow>
             {
               _.map(
                 headers,
                 (value, index) => {
                   return (
-                    <th key={index}>
+                    <TableCell key={index}>
                       {value}
-                    </th>
+                    </TableCell>
                   )
                 }
               )
             }
-          </tr>
-        </thead>
+          </TableRow>
+        </TableHead>
       )
 
       const tableRows = (
-        <tbody>
+        <TableBody>
           {
             _.map(
               queryTables.values,
               (value, index) => {
                 return (
-                  <tr key={index}>
+                  <TableRow key={index}>
                     {
                       _.map(
                         headers,
                         (item, index) => {
                           return (
-                            <td key={index}>
+                            <TableCell key={index}>
                               { _.join(_.map(queryTables.mappedFields[item], n => value[n]), ' ') }
-                            </td>
+                            </TableCell>
                           )
                         }
                       )
                     }
-                  </tr>
+                  </TableRow>
                 )
               }
             )
           }
-        </tbody>
+        </TableBody>
       )
 
       table = (
-        <table>
+        <Table>
           {tableHeaders}
           {tableRows}
-        </table>
+        </Table>
       )
 
-      let image = 'https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/2.jpg'
+      // let image = 'https://material-components.github.io/material-components-web-catalog/static/media/photos/3x2/2.jpg'
 
       list = (
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'stretch' }}>
@@ -138,46 +137,35 @@ class SqlList extends Component {
                     key={index}
                     style={{ margin: '5px' }}
                   >
-                    <Card className='demo-card demo-ui-control'>
-                      <CardPrimaryContent className='demo-card__primary-action'>
-                        <CardMedia square imageUrl={image} className='demo-card__media' />
-                        <div className='demo-card__primary'>
-                          <Headline6 className='demo-card__title'>
-                            { _.join(_.map(queryTables.mappedFields['name'], n => queryTableValue[n]), ' ') }
-                          </Headline6>
-                          <Subtitle2 className='demo-card__subtitle'>
-                            {
-                              queryColumns ?
-                                _.join(
-                                  _.map(
-                                    _.filter(
-                                      queryColumns.values, 
-                                      queryColumnValue => _.join(_.map(queryColumns.mappedFields['parentid'], n => queryColumnValue[n]), '') === _.join(_.map(queryTables.mappedFields['id'], n => queryTableValue[n]), ' ')
-                                    ),
-                                    queryColumnValue => _.join(_.map(queryColumns.mappedFields['name'], n => queryColumnValue[n]), ' ')
-                                  )
+                    <Card className={classes.card}>
+                      <CardContent>
+                        <Typography className={classes.title} color="textSecondary" gutterBottom>
+                          Table
+                        </Typography>
+                        <Typography variant="h5" component="h2">
+                          { _.join(_.map(queryTables.mappedFields['name'], n => queryTableValue[n]), ' ') }
+                        </Typography>
+                        <Typography className={classes.pos} color="textSecondary">
+                          Columns
+                        </Typography>
+                        <Typography component="p">
+                          {
+                            queryColumns ?
+                              _.join(
+                                _.map(
+                                  _.filter(
+                                    queryColumns.values, 
+                                    queryColumnValue => _.join(_.map(queryColumns.mappedFields['parentid'], n => queryColumnValue[n]), '') === _.join(_.map(queryTables.mappedFields['id'], n => queryTableValue[n]), ' ')
+                                  ),
+                                  queryColumnValue => _.join(_.map(queryColumns.mappedFields['name'], n => queryColumnValue[n]), ' ')
                                 )
-                                : _.join(_.map(queryTables.mappedFields['id'], n => queryTableValue[n]), '')
-                            }
-                          </Subtitle2>
-                        </div>
-                      </CardPrimaryContent>
+                              )
+                              : _.join(_.map(queryTables.mappedFields['id'], n => queryTableValue[n]), '')
+                          }
+                        </Typography>
+                      </CardContent>
                       <CardActions>
-                        <CardActionButtons>
-                          <Button>Read</Button>
-                          <Button>Bookmark</Button>
-                        </CardActionButtons>
-                        <CardActionIcons>
-                          <IconButton>
-                            <MaterialIcon icon='favorite_border' />
-                          </IconButton>
-                          <IconButton>
-                            <MaterialIcon icon='share' />
-                          </IconButton>
-                          <IconButton>
-                            <MaterialIcon icon='more_vert' />
-                          </IconButton>
-                        </CardActionIcons>
+                        <Button size="small">Learn More</Button>
                       </CardActions>
                     </Card>
                   </div>
@@ -204,7 +192,8 @@ class SqlList extends Component {
 }
 
 SqlList.propTypes = {
-  globalState: PropTypes.object
+  globalState: PropTypes.object,
+  classes: PropTypes.object.isRequired
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -212,7 +201,7 @@ const mapDispatchToProps = dispatch => ({
   submitRequestDirect: (name, parent) => dispatch(fetchPostsDirect(name, parent))
 })
 
-export default connect(
+export default withStyles(styles)(connect(
   null,
   mapDispatchToProps
-)(SqlList)
+)(SqlList))

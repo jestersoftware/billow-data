@@ -1,18 +1,3 @@
-// using node-style package resolution in a CSS file: 
-@import "~normalize.css";
-@import "~@blueprintjs/core/lib/css/blueprint.css";
-@import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
-
-@import '@material/react-layout-grid/index.scss';
-@import '@material/react-typography/index.scss';
-@import '@material/react-card/index.scss';
-@import '@material/react-material-icon/index.scss';
-@import "@material/react-button/index.scss";
-@import '@material/react-icon-button/index.scss';
-
-@import "./App.Material";
-
-
 #root {
   height: 100vh;
   display: flex;
@@ -88,3 +73,29 @@
   line-height: 1.5;
 }
  */
+
+
+ .left-menu-container {
+  width: 200px;
+}
+
+.flex-container {
+  display: flex;
+}
+
+.flex-container.horizontal {
+  flex-direction: row;
+}
+  
+.flex-container.vertical {
+  flex-direction: column;
+}
+
+.flex-child-fixed {
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.flex-child-auto {
+  flex: auto;
+}
